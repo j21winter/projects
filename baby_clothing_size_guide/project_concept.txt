@@ -1,0 +1,36 @@
+Parent would input the various size parameters of their child (height, weight etc)
+website will give back the appropriate size clothing they should be in. 
+
+The response could be a response per clothing brand / clothing type / date etc 
+
+Would need to work from a data source like a size guide from each clothing provider. 
+
+
+
+
+
+Templates:
+logged in: 
+    Dashboard
+        Features
+            Quick Search... Should redirect to a page?
+            Child Quick Display cards
+            Side Bar
+    Child page
+        Show child details
+            !!!!!!!
+            Add child birth date to child model info and then display child age on page base don birth date
+            on update data give a new card... 
+            Show growth chart / size tracking graph of child over time
+            Work out a better way to display our cards and search results 
+            Prevent duplicate results
+            !!!!!!!!!!            
+    Search size... reverse engineer the rest of the functionality essentially:
+        (click a size and then generate the size guide parameters per brand...)
+        (how big do i need to be to wear 3-6M? for example)
+        (show list of brands: filter options: smallest, largest, A-Z, Z-A)
+
+
+
+Work out a data structure to reference the baby size guides...
+Work out how to print suggestions from a website... ( JS file 'print()'?). Would want to print to a pre-prepared PDF

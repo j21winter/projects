@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Child Dashboard</title>
+</head>
+<body>
+    <div class="wrapper p-3">
+        <nav class="col-12 d-flex justify-content-center">
+            <div class="d-flex col-11 p-5 justify-content-between ">
+                <div class="nav_left">
+                    <h1>Child Dashboard</h1>
+                </div>
+                <div class="nav_right d-flex justify-content-end">
+                    <a href="/user/dashboard">HOME</a> | <a href="">My Profile</a> | <a href="/user/logout">LOGOUT</a>
+                </div>
+            </div>
+        </nav>
+        <main class="d-flex justify-content-evenly">
+            <div class="side_bar p-3">
+                <div class="side_bar_profile p-3 mb-3 border border-radius-3 border-dark border-3 rounded rounded-3">
+                    <div class="side_bar_title">
+                        <h3>{{child.name}}</h3>
+                    </div>
+                    <div class="side_bar_body">
+                        <table class="table">
+                            <tr>
+                                <td>Height</td>
+                                <td>{{child.height}}</td>
+                            </tr>
+                            <tr>
+                                <td>Weight</td>
+                                <td>{{child.weight}}</td>
+                            </tr>
+                            <tr>
+                                <td>Sole length</td>
+                                <td>{{child.foot_size}}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="update_child p-3 border border-radius-3 border-dark border-3 rounded rounded-3 ">
+                    <h3>Update Child</h3>
+                    <form action="/child/update" method="POST">
+                        <input type="hidden" name="id" value="{{child.id}}">
+                        <div class="mb-3">
+                            <label class="col-4" for="name">Name:</label>
+                            <input class="col-7" type="text" name="name" value="{{child.name}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-4" for="height">Height:</label>
+                            <input class="col-7" type="number" name="height" value="{{child.height}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-4" for="weight">Weight:</label>
+                            <input class="col-7" type="number" name="weight" value="{{child.weight}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-4" for="sole_length">Sole Length:</label>
+                            <input class="col-7" type="number" name="sole_length" value="{{child.foot_size}}">
+                        </div>
+                        <div class="mb-3">
+                            <button class="btn btn-success" type="submit">Update Child</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="hero col-8 p-3 ">
+                <div class="search_bar d-flex p-3 border border-radius-3 border-dark border-3 rounded rounded-3 mb-5">
+                    <h2 class="col-3 d-flex align-items-center">New Search</h2>
+                    <!-- <div class="search_type_selection d-flex">
+                        <label for="search_type">Search Type:</label>
+                        <select name="search_type" id="search_type">
+                            <option value="clothes">Clothes</option>
+                            <option value="shoes">Shoes</option>
+                            <option value="pajamas">Pajamas</option>
+                        </select>
+                    </div> -->
+                    <div class="search_form col-9">
+                        <form action="/suggestion/search" method='POST' class="col-12 d-flex justify-content-between align-items-center">
+                            <input type="hidden" name="child_id" value="{{child.id}}">
+                            <input type="hidden" name="weight" value="{{child.weight}}">
+                            <input type="hidden" name="height" value="{{child.height}}">
+                            <input type="hidden" name="foot_size" value="{{child.foot_size}}">
+                            <!-- <label for="select_child">Select Child</label>
+                            <select name="select_child" id="select_child">
+                                <option value="child_1">***** child 1 ****</option>
+                                <option value="child_2"> **** child 2 ***</option>
+                            </select> -->
+                            <!-- <div class="col-3 d-flex flex-column  align-middle">
+                                <label for="weight">Weight:</label>
+                                <input type="number" name="weight">
+                            </div> -->
+                            <!-- <div class="col-3 d-flex flex-column">
+                                <label for="height">Height:</label>
+                                <input type="number" name="height">
+                            </div> -->
+                            <!-- <div class="col-3 d-flex flex-column">
+                                <label for="brand">Brand:</label>
+                                <select name="brand_type" id="brand_type">
+                                    <option value="all_brands">All Brands</option>
+                                    <option value="brand_1">Brand 1</option>
+                                    <option value="brand_2">Brand_2</option>
+                                </select>
+                            </div> -->
+                            <div class="col-1">
+                                <button type="submit">Search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="results p-3 border border-radius-3 border-dark border-3 rounded rounded-3">
+                    <div class="results_header d-flex justify-content-between">
+                        <h2>{{child.name}}'s Searches</h2>
+                        <div class="result_filter">
+                            <label for="result_filter"></label>
+                            <select name="result_filter" id="result_filter">
+                                <option value="most_recent">Most Recent</option>
+                                <option value="pajamas">Pajamas</option>
+                                <option value="clothes">Clothes</option>
+                                <option value="brand_1">*** Brand 1 ****</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="result_body d-flex">
+                        {% for suggestion in child.suggestions%}
+                        <div class="result_card p-3 border border-radius-3 border-dark border-3 rounded rounded-3 col-3">
+                            <div class="d-flex justify-content-center">
+                                <p> {{suggestion.size}} - {{suggestion.brand}} </p>
+                            </div>
+                            <table class="table">
+                                <tr>
+                                    <td>Sizing</td>
+                                    <td>{{suggestion.size}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Brand</td>
+                                    <td>{{suggestion.brand}}</td>
+                                </tr>
+                                <tr>
+                                    <td>clothing_type</td>
+                                    <td>{{suggestion.clothing_type}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Match Type</td>
+                                    <td>{{suggestion.match_type}}</td>
+                                </tr>
+                            </table>
+                            <table class="table">
+                                <p>Child measurements</p>
+                                <thead>
+                                    <tr>
+                                        <td>Weight</td>
+                                        <td>Height</td>
+                                        <td>Sole Length</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{suggestion.child_weight}}</td>
+                                        <td>{{suggestion.child_height}}</td>
+                                        <td>{{suggestion.child_foot_size}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table class="table">
+                                <p>Item measurements</p>
+                                <thead>
+                                    <tr>
+                                        <td>Weight(lbs)</td>
+                                        <td>Height(in)</td>
+                                        <!-- <td>Sole Length(in)</td> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{suggestion.min_weight}} - {{suggestion.max_weight}}</td>
+                                        <td>{{suggestion.min_height}} - {{suggestion.max_height}}</td>
+                                        <!-- <td>{{suggestion.child_height}}</td>
+                                        <td>{{suggestion.child_foot_size}}</td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="d-flex flex-column text-center">
+        <a href="https://www.flaticon.com/free-icons/user" title="user icons">User icons created by Saepul Nahwan - Flaticon</a>
+        <a href="https://www.flaticon.com/free-icons/logout" title="logout icons">Logout icons created by Pixel perfect - Flaticon</a>
+    </footer>
+</body>
+</html>
