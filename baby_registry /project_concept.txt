@@ -1,0 +1,8 @@
+User can set up a list of items they want for their registry
+people can log in and mark if they are buying the item or not. 
+Allow for sorting of various options?
+Once an Item has been marked as purchased it will be removed from the overall public list... 
+
+Come up with a few different ideas as to who can see what:
+user(host) can see their whole registry - who has bought what for them - Thank you Cards?
+user(guest) can see which items they have opted into buying and the details of who they are sending it to

@@ -1,0 +1,17 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.icon{
+    height: 30px;
+}
+
+.result_card{
+    display:block;
+}
+
+.hide{
+    display:none;
+}

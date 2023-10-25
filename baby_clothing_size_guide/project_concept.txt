@@ -1,3 +1,4 @@
+DESCRIPTION:
 Parent would input the various size parameters of their child (height, weight etc)
 website will give back the appropriate size clothing they should be in. 
 
@@ -5,32 +6,71 @@ The response could be a response per clothing brand / clothing type / date etc
 
 Would need to work from a data source like a size guide from each clothing provider. 
 
+QUESTIONS:
+
+RECENT NOTES:
+Added lots of comments to make working on the project a little easier. 
+Could do with more comments throughout the whole project. 
+Changed suggestion INSERT query to INSERT IGNORE and changed Suggestion table in the DB to have a unique key across multiple columns. 
+    This will prevent duplicate suggestions being saved to the db.
+Updated the child page for better result card viewing. 
+Added functionality to the home dashboard to show cards when child is selected from drop down. 
+Card filter functionality working for both dashboard and child page. You can now filter by certain attributes. This is by adding result attributes to their class list. 
+    then using javaScript to hide or show those that fit or do not fit the input.
+Created method in user model getOneByID that will get the user, all children and suggestions connected to the user.children for the dashboard
+Added match type conditional statements to evaluate the match strength of each suggestion
+Added birth date to the child model, create forms and update forms.
+
+NEXT STEPS:
+Add updated at message on child statistics so the parent knows when they last completed the update fo the child. 
+Plotting a graph for each child on the child page to show their development over time. 
+    >> may need to add historical data attribute to the child or a new model of historical data with foreign key of child. 
+Add more design to the website to make it more realistic and structured. 
+Look at creating animations for presenting the data.
+Also look at presenting the requests into a plain table for those who want all the info and don't care about the aesthetics.
+Look into the responsiveness of the view. Especially once the suggestion results have come back in.
+    >> it may be more beneficial to make tiles for each result that populate in rows and extend down the page.
+    >> think eCommerse type website.
 
 
+ADDITIONAL RESOURSES:
+ONLY WEBSITE THAT DOES THE SAME THING - >> https://www.sizecast.com/
 
+INTERNATIONAL SIZE COMAPRISONS -- >> https://kiwisizing.com/blog/size-conversion-chart-childrens-clothing/
+COMPREHENSIVE SIZE GUIDING -- >> https://www.sizeguide.net/size-guide-children-size-chart.html
+MINI RUBY (GROWTH CHART) AND INFO -->> https://miniruby.com/pages/kids-weight-height-baby-size-chart
+EXPLANATIONS -- >> https://www.verywellfamily.com/what-size-does-my-toddler-wear-6822794
 
 Templates:
 logged in: 
     Dashboard
         Features
-            Quick Search... Should redirect to a page?
+            Quick Search.
             Child Quick Display cards
             Side Bar
+            Children
+            Add A child form
+            Existing requests for each child.
     Child page
         Show child details
-            !!!!!!!
-            Add child birth date to child model info and then display child age on page base don birth date
-            on update data give a new card... 
-            Show growth chart / size tracking graph of child over time
-            Work out a better way to display our cards and search results 
-            Prevent duplicate results
-            !!!!!!!!!!            
+        TODO:
+            Add child birth date to child model info and then display child age on page based on birth date?
+            on update data give a new card?
+            Show growth chart / size tracking graph of child over time ? checkout bookmarks on chrome for help here. 
+            Work out a better way to display our cards and search results
+                could be by brand
+                    subdivided into age groups
+                    sub divided into clothing type
+                    sub divided into match type.
+
+    Filtering searches and results on our view pages...
+        Would this mean a different query for each filter. 
+        if there a better way to give functionality to the user when seeing the results given to them. 
+
+
     Search size... reverse engineer the rest of the functionality essentially:
         (click a size and then generate the size guide parameters per brand...)
         (how big do i need to be to wear 3-6M? for example)
         (show list of brands: filter options: smallest, largest, A-Z, Z-A)
 
-
-
-Work out a data structure to reference the baby size guides...
 Work out how to print suggestions from a website... ( JS file 'print()'?). Would want to print to a pre-prepared PDF

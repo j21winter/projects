@@ -1,0 +1,3 @@
+users can log in and add themselves to the waitlist. an admin can take them off and assign them to a kiosk.
+This would estimate how long each person is waiting in line. It can estimate the wait time based on people in line and services they may require. 
+

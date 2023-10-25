@@ -3,13 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous" defer></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- STATIC -->
+    <script src="{{ url_for('static', filename='../static/js/dashboard/script.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/dashboard/style.css') }}">
     <title>User Dashboard</title>
 </head>
 <body>
     <div class="wrapper p-3">
+
+        <!-- nav bar -->
         <nav class="col-12 d-flex justify-content-center">
             <div class="d-flex col-11 p-5 justify-content-between ">
                 <div class="nav_left">
@@ -20,14 +25,24 @@
                 </div>
             </div>
         </nav>
+
+        <!-- main content -->
         <main class="d-flex justify-content-evenly">
+
+            <!-- side bar -->
             <div class="side_bar p-3">
                 <div class="side_bar_content p-3 border border-radius-3 border-dark border-3 rounded rounded-3">
+
+                    <!-- sidebar title -->
                     <div class="side_bar_title">
                         <h3>Your Profile</h3>
                     </div>
+
+                    <!-- sidebar body -->
                     <div class="side_bar_body">
                         <h4>{{session['name']}}</h4>
+
+                        <!-- list of current children in profile-->
                         {% if user.children|length > 0: %}
                             <table class="table table-striped">
                                 <thead>
@@ -41,7 +56,7 @@
                                             <tr>
                                                 <td>{{child.name}}</td>
                                                 <td><a href="/child/show/{{child.id}}">Profile</a></td>
-                                                <td><a href="/child/delete/{{child.id}}">Delete</a></td>
+                                                <td><a href="/child/delete/{{child.id}}" method="DELETE">Delete</a></td>
                                             </tr>
                                         </tbody>
                                     {% endfor %}
@@ -50,6 +65,8 @@
                             <p>Add Children Below</p>
                         {% endif %}
                     </div>
+
+                    <!-- add child form -->
                     <div class="add_child">
                         <h3>Add Child</h3>
                         <form action="/child/create" method="POST">
@@ -57,6 +74,10 @@
                             <div class="mb-3">
                                 <label class="col-4" for="child_name">Name:</label>
                                 <input class="col-7" type="text" name="child_name">
+                            </div>
+                            <div class="mb-3">
+                                <label class="col-4" for="date_of_birth">Date of Birth:</label>
+                                <input class="col-7" type="datetime-local" name="date_of_birth">
                             </div>
                             <div class="mb-3">
                                 <label class="col-4" for="child_height">Height:</label>
@@ -77,8 +98,16 @@
                     </div>
                 </div>
             </div>
+
+            <!-- main content/ HERO -->
             <div class="hero col-8 p-3 ">
+
+                <!-- search bar -->
                 <div class="search_bar d-flex p-3 border border-radius-3 border-dark border-3 rounded rounded-3 mb-5">
+
+                    <!-- TODO add search functionality -->
+                    <!-- ! Not sure this search functionality will work -->
+                    <!-- ! preference on the below search type -->
                     <h2 class="col-3 d-flex align-items-center">Quick Search</h2>
                     <!-- <div class="search_type_selection d-flex">
                         <label for="search_type">Search Type:</label>
@@ -88,6 +117,10 @@
                             <option value="pajamas">Pajamas</option>
                         </select>
                     </div> -->
+
+                    
+                    <!-- Search form -->
+                    <!-- TODO this would be a search that is not assigned to a child, you can assign it to a child once generated -->
                     <div class="search_form col-9">
                         <form action="*******" class="col-12 d-flex justify-content-between align-items-center">
                             <!-- <label for="select_child">Select Child</label>
@@ -107,8 +140,10 @@
                                 <label for="brand">Brand:</label>
                                 <select name="brand_type" id="brand_type">
                                     <option value="all_brands">All Brands</option>
-                                    <option value="brand_1">Brand 1</option>
-                                    <option value="brand_2">Brand_2</option>
+
+                                    <!-- TODO add brand type as options-->
+                                    <!-- <option value="brand_1">Brand 1</option>
+                                    <option value="brand_2">Brand_2</option> -->
                                 </select>
                             </div>
                             <div class="col-1">
@@ -117,47 +152,114 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Results -->
                 <div class="results p-3 border border-radius-3 border-dark border-3 rounded rounded-3">
+
+                    <!-- Results header -->
+                    <!-- Select child name -->
                     <div class="results_header d-flex justify-content-between">
                         <h2>Child Name: 
                             <span>
-                                <select name="display_child" id="display_child">
-                                    {% if user.children|length > 0: %}
-                                        {% for child in user.children%}
-                                            <option value="{{child.name}}">{{child.name}}</option>
-                                        {% endfor %}
-                                        {% else: %}
-                                            <option value="none">none</option>
-                                        {% endif %}
-                                </select>
+                                <div class="child_filter">
+                                    <select name="display_child" id="display_child" onchange="filterSelection()">
+                                        <option value="all" selected disabled hidden>Select Child</option>
+                                        {% if user.children|length > 0: %}
+                                            <option>-- select child --</option>
+                                            {% for child in user.children%}
+                                                <option value="{{child.name}}">{{child.name}}</option>
+                                            {% endfor %}
+                                            {% else: %}
+                                                <option value="none">none</option>
+                                            {% endif %}
+                                    </select>
+                                </div>
                             </span>
                         </h2>
+
+                        <!-- Search filter -->
                         <div class="result_filter">
-                            <label for="result_filter"></label>
-                            <select name="result_filter" id="result_filter">
-                                <option value="most_recent">Most Recent</option>
-                                <option value="pajamas">Pajamas</option>
+                            <label for="result_filter">Filter Results By:</label>
+                            <select name="result_filter" id="result_filter" onchange="filterSelection()">
+                                <option value="all">All</option>
                                 <option value="clothes">Clothes</option>
-                                <option value="brand_1">*** Brand 1 ****</option>
+                                <option value="pajamas">Pajamas</option>
+                                <option value="gerber">Gerber</option>
                             </select>
-                        </div>
                     </div>
-                    <div class="result_body d-flex">
-                        <div class="result_card p-3 border border-radius-3 border-dark border-3 rounded rounded-3 col-3">
-                            <div class="d-flex justify-content-center">
-                                <p>Suggestion Title</p>
-                            </div>
-                            <table class="table">
-                                <tr>
-                                    <td>Sizing</td>
-                                    <td>*****</td>
-                                </tr>
-                                <tr>
-                                    <td>Brand</td>
-                                    <td>*****</td>
-                                </tr>
-                            </table>
-                        </div>
+                    </div>
+
+                    <!-- Suggestion Results  -->
+                    <div class="result_body d-flex overflow-scroll">
+
+                        <!-- for loop to show all suggestions  -->
+                        {% for child in user.children %}
+                            {% for suggestion in child.suggestions %}
+
+                                <!-- result card -->
+                                <div class="result_card p-3 border border-radius-3 border-dark border-3 rounded rounded-3 col-3 all {{ child.name }} {{ suggestion.size }} {{ suggestion.brand }} {{ suggestion.clothing_type }} {{ suggestion.match_type }}">
+                                    <div class="text-center">
+                                        <p>{{ child.name }}</p>
+                                        <p> {{suggestion.size}} - {{suggestion.brand}} </p>
+                                    </div>
+                                    <div class="card-head border border-3 border-dark rounded rounded-3 mb-3">
+                                        <div class="d-flex justify-content-around text-center">
+                                            <div class="sizing border border-3 border-dark col-6">
+                                                <p>Sizing</p>
+                                                <p>{{suggestion.size}}</p>
+                                            </div>
+                                            <div class="brand  border border-3 border-dark col-6">
+                                                <p>Brand</p>
+                                                <p>{{suggestion.brand}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-around text-center">
+                                            <div class="clothing_type  border border-3 border-dark col-6">
+                                                <p>Clothing Type</p>
+                                                <p>{{suggestion.clothing_type}}</p>
+                                            </div>
+                                            <div class="match_type  border border-3 border-dark col-6">
+                                                <p>Match Type</p>
+                                                {% if suggestion.min_height <= child.height <= suggestion.max_height and suggestion.min_weight <= child.weight <= suggestion.max_weight%}
+                                                    <p>100%</p>
+                                                {% elif suggestion.min_height <= child.height <= suggestion.max_height %}
+                                                    <p>50%</p>
+                                                    <p>Height</p>
+                                                {% elif suggestion.min_weight <= child.weight <= suggestion.max_weight %}
+                                                    <p>50%</p>
+                                                    <p>weight</p>
+                                                {% else %}
+                                                    <p>0%</p>
+                                                {% endif %}
+
+
+
+
+                                                <!-- <p>{{suggestion.match_type}}</p> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table text-center">
+                                        <p class="text-center">Item measurements</p>
+                                        <thead>
+                                            <tr>
+                                                <td>Weight(lbs)</td>
+                                                <td>Height(in)</td>
+                                                <!-- <td>Sole Length(in)</td> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{suggestion.min_weight}} - {{suggestion.max_weight}}</td>
+                                                <td>{{suggestion.min_height}} - {{suggestion.max_height}}</td>
+                                                <!-- <td>{{suggestion.child_height}}</td>
+                                                <td>{{suggestion.child_foot_size}}</td> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>

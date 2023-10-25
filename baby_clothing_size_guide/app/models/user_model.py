@@ -6,6 +6,7 @@ from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app) 
 
 from app.models import child_model
+from app.models import suggestion_model
 
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]+$') 
 # PASSWORD_REGEX = re.compile(r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$")
@@ -24,27 +25,64 @@ class User:
     @classmethod
     def get_user_by_id(cls, id):
         print('GETTING USER WITH ID')
+        # Query to get user by ID with all children and subsequent child suggestions.
         query = '''
                 SELECT * FROM users
                 LEFT JOIN children on users.id = children.user_id
-                WHERE users.id = %(id)s;
+                LEFT JOIN suggestions on children.id = suggestions.child_id
+                WHERE users.id = %(id)s;     
                 '''
         results = connectToMySQL(cls.db).query_db(query, {'id': id})
+
+        # Instantiate the user. 
         user = cls(results[0])
+
+        # Loop through results for children and suggestions
         for row in results:
-            if 'children.id' in row and row['children.id'] is not None:
-                user.children.append(child_model.Child( {
+
+            # Check that their is child data and that the child has not already been added to user.children[].
+            if row['children.id'] is not None and row['children.id'] not in [child.id for child in user.children] :
+
+                # Instantiate the child with the available data
+                child = child_model.Child({
                     'id': row['children.id'],
                     'name': row['children.name'],
+                    'date_of_birth': row['date_of_birth'],
                     'height': row['height'],
                     'weight': row['weight'],
                     'foot_size': row['foot_size'],
-                    'created_at': row['children.created_at'],
-                    'updated_at': row['children.updated_at'],
                     'user_id': row['user_id'],
-                }))
-        print(user.children)
+                })
+
+                # Append the child to the user.children list. 
+                user.children.append(child)
+            
+            # Check that their is suggestion data and that the suggestions has not already been added to child.suggestions[].
+            if row['suggestions.id'] is not None and row['suggestions.id'] not in [suggestion.id for suggestion in child.suggestions] :
+
+                # Instantiate the suggestion with the available data
+                suggestion = suggestion_model.Suggestion({
+                    'id': row['suggestions.id'],
+                    'brand': row['brand'],
+                    'clothing_type': row['clothing_type'],
+                    'size': row['size'],
+                    'child_height': row['child_height'],
+                    'child_weight': row['child_weight'],
+                    'child_foot_size': row['child_foot_size'],
+                    'child_id': row['child_id'],
+                    'min_weight': row['min_weight'],
+                    'max_weight': row['max_weight'],
+                    'min_height': row['min_height'],
+                    'max_height': row['max_height'],
+                })
+
+                # Find the child object in the user.children list that matches the relationship
+                child = next(child for child in user.children if child.id == row['child_id'])
+                # Attach the child to the found object 
+                child.suggestions.append(suggestion)
+        
         print(f'GETTING USERS with children sending back {user}')
+        # return the user with children and suggestions attached
         return user
     
     @classmethod
@@ -74,6 +112,7 @@ class User:
         return user
     
         #validate registration form information
+    
     @staticmethod
     def validate_user(data):
         # Set is_valid to true as default
@@ -126,38 +165,4 @@ class User:
         
         print(is_valid)
         return is_valid
-
-    # @classmethod
-    # def data_upload(cls):
-    #     # data = .....
-    #     query = '''
-    #             INSERT INTO size_guides (brand, clothing_type, size, weight_min, weight_max, height_min, height_max)
-    #             VALUES (%(brand)s, %(clothing_type)s, %(size)s, %(weight_min)s, %(weight_max)s, %(height_min)s, %(height_max)s);
-    #             '''
-    #     data = {}
-    #     for clothes_type in guide:
-    #         data['brand'] = 'gerber'
-    #         data['clothing_type'] = clothes_type
-    #         for size in guide[clothes_type]:
-    #             data['size'] = size
-    #             weight = guide[clothes_type][size]['weight']
-    #             height = guide[clothes_type][size]['height']
-    #             if 'min' in weight:
-    #                 data['weight_min'] = weight['min']
-    #             else:
-    #                 data['weight_min'] = 0
-    #             if 'max' in weight:
-    #                 data['weight_max'] = weight['max']
-    #             # else:
-    #             #     data['weight_max'] = 'none'
-    #             if 'min' in height:
-    #                 data['height_min'] = height['min']
-    #             else:
-    #                 data['height_min'] = 0
-    #             if 'max' in height:
-    #                 data['height_max'] = height['max']
-    #             # else:
-    #             #     data['height_max'] = 'none'
-    #             connectToMySQL(cls.db).query_db(query, data)
-    #     return guide
 

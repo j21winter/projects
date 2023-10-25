@@ -1,5 +1,6 @@
 from app import app
 from app.models.user_model import User
+from app.models import child_model
 from flask import render_template, jsonify, request, redirect, flash, session
 from flask_bcrypt import Bcrypt
 bcrypt = Bcrypt(app) 
@@ -59,9 +60,9 @@ def login_user():
 @app.route('/user/logout')
 def logout():
     session.clear()
-    
     return redirect('/')
 
 @app.route('/user/dashboard')
 def dashboard():
-    return render_template('user_dashboard.html', user = User.get_user_by_id(session['id']))
+        return render_template('user_dashboard.html', user = User.get_user_by_id(session['id']))
+

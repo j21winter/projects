@@ -3,30 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous" defer></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- STATIC -->
+    <script src="{{ url_for('static', filename='../static/js/child/script.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/child/style.css') }}">
     <title>Child Dashboard</title>
 </head>
 <body>
     <div class="wrapper p-3">
+
+        <!-- Nav Bar -->
         <nav class="col-12 d-flex justify-content-center">
             <div class="d-flex col-11 p-5 justify-content-between ">
                 <div class="nav_left">
                     <h1>Child Dashboard</h1>
                 </div>
-                <div class="nav_right d-flex justify-content-end">
-                    <a href="/user/dashboard">HOME</a> | <a href="">My Profile</a> | <a href="/user/logout">LOGOUT</a>
+                <div class="nav_right d-flex justify-content-end align-items-center">
+                    <a class="btn btn-primary" href="/user/dashboard">HOME</a>
+                    <a class="btn btn-info" href="">My Profile</a>
+                    <a class="btn btn-warning" href="/user/logout">LOGOUT</a>
                 </div>
             </div>
         </nav>
+
+        <!-- main content -->
         <main class="d-flex justify-content-evenly">
+
+            <!-- sidebar container-->
             <div class="side_bar p-3">
+
+                <!-- sidebar profile -->
                 <div class="side_bar_profile p-3 mb-3 border border-radius-3 border-dark border-3 rounded rounded-3">
                     <div class="side_bar_title">
-                        <h3>{{child.name}}</h3>
+                        <h3 class="text-center">{{child.name}}</h3>
+                        <h3 class="text-center">{{child.format_date}}</h3>
                     </div>
                     <div class="side_bar_body">
+
+                        <!-- Current Child Statistics -->
+                        <p class="text-center">Current Statistics</p>
                         <table class="table">
                             <tr>
                                 <td>Height</td>
@@ -41,27 +58,56 @@
                                 <td>{{child.foot_size}}</td>
                             </tr>
                         </table>
+
+                        <!-- TODO Historical Searches -->
+                        <!-- TODO understand how to add this part. Should be able to reference back different sizes from most recent to oldest given searches in those statistics -->
+                        <!-- TODO also maybe make a graph out of the changes -->
+                        <!-- <p class="text-center">Current Statistics</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Height</th>
+                                    <th>Weight</th>
+                                    <th>Sole length</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for search in child.searches %}
+                                    <tr>
+                                        <td>{{search.height}}</td>
+                                        <td>{{search.weight}}</td>
+                                        <td>{{search.foot_size}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table> -->
                     </div>
                 </div>
+
+                <!-- sidebar update child form -->
                 <div class="update_child p-3 border border-radius-3 border-dark border-3 rounded rounded-3 ">
                     <h3>Update Child</h3>
                     <form action="/child/update" method="POST">
                         <input type="hidden" name="id" value="{{child.id}}">
                         <div class="mb-3">
                             <label class="col-4" for="name">Name:</label>
-                            <input class="col-7" type="text" name="name" value="{{child.name}}">
+                            <input class="col-7" type="text" name="name" id="name" value="{{child.name}}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="col-4" for="date_of_birth">Date of Birth:</label>
+                            <input class="col-7" type="datetime-local" name="date_of_birth" id="date_of_birth" value="{{child.date_of_birth}}">
                         </div>
                         <div class="mb-3">
                             <label class="col-4" for="height">Height:</label>
-                            <input class="col-7" type="number" name="height" value="{{child.height}}">
+                            <input class="col-7" type="number" name="height" id="height" value="{{child.height}}">
                         </div>
                         <div class="mb-3">
                             <label class="col-4" for="weight">Weight:</label>
-                            <input class="col-7" type="number" name="weight" value="{{child.weight}}">
+                            <input class="col-7" type="number" name="weight" id="weight" value="{{child.weight}}">
                         </div>
                         <div class="mb-3">
                             <label class="col-4" for="sole_length">Sole Length:</label>
-                            <input class="col-7" type="number" name="sole_length" value="{{child.foot_size}}">
+                            <input class="col-7" type="number" name="sole_length" id="sole_length" value="{{child.foot_size}}">
                         </div>
                         <div class="mb-3">
                             <button class="btn btn-success" type="submit">Update Child</button>
@@ -69,9 +115,14 @@
                     </form>
                 </div>
             </div>
+
+            <!-- main content hero section -->
             <div class="hero col-8 p-3 ">
+
+                <!-- search bar -->
                 <div class="search_bar d-flex p-3 border border-radius-3 border-dark border-3 rounded rounded-3 mb-5">
                     <h2 class="col-3 d-flex align-items-center">New Search</h2>
+                    <!--TODO add search type functionality -->
                     <!-- <div class="search_type_selection d-flex">
                         <label for="search_type">Search Type:</label>
                         <select name="search_type" id="search_type">
@@ -80,6 +131,8 @@
                             <option value="pajamas">Pajamas</option>
                         </select>
                     </div> -->
+
+                    <!-- TODO This is quick search for testing maybe involve this in our search bar -->
                     <div class="search_form col-9">
                         <form action="/suggestion/search" method='POST' class="col-12 d-flex justify-content-between align-items-center">
                             <input type="hidden" name="child_id" value="{{child.id}}">
@@ -113,79 +166,91 @@
                         </form>
                     </div>
                 </div>
+
+                <!-- Search results and suggestions -->
                 <div class="results p-3 border border-radius-3 border-dark border-3 rounded rounded-3">
+
+                    <!-- suggestions title and filter -->
                     <div class="results_header d-flex justify-content-between">
                         <h2>{{child.name}}'s Searches</h2>
+
+                        <!-- suggestion filter -->
                         <div class="result_filter">
-                            <label for="result_filter"></label>
-                            <select name="result_filter" id="result_filter">
-                                <option value="most_recent">Most Recent</option>
-                                <option value="pajamas">Pajamas</option>
-                                <option value="clothes">Clothes</option>
-                                <option value="brand_1">*** Brand 1 ****</option>
-                            </select>
+                                <label for="result_filter">Filter Results By:</label>
+                                <select name="result_filter" id="result_filter" onchange="filterSelection(this.value)">
+                                    <!-- <option value="none" selected disabled hidden>Select an Option</option> -->
+                                    <option value="all">All</option>
+                                    <!-- <option value="current">Most Recent</option> -->
+                                    <option value="clothes">Clothes</option>
+                                    <option value="pajamas">Pajamas</option>
+                                    <option value="gerber">Gerber</option>
+                                </select>
                         </div>
                     </div>
-                    <div class="result_body d-flex">
+
+                    <!-- Suggestion Results  -->
+                    <div class="result_body d-flex overflow-scroll">
+
+                        <!-- for loop to show all suggestions  -->
                         {% for suggestion in child.suggestions%}
-                        <div class="result_card p-3 border border-radius-3 border-dark border-3 rounded rounded-3 col-3">
-                            <div class="d-flex justify-content-center">
-                                <p> {{suggestion.size}} - {{suggestion.brand}} </p>
-                            </div>
-                            <table class="table">
-                                <tr>
-                                    <td>Sizing</td>
-                                    <td>{{suggestion.size}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Brand</td>
-                                    <td>{{suggestion.brand}}</td>
-                                </tr>
-                                <tr>
-                                    <td>clothing_type</td>
-                                    <td>{{suggestion.clothing_type}}</td>
-                                </tr>
-                                <tr>
-                                    <td>Match Type</td>
-                                    <td>{{suggestion.match_type}}</td>
-                                </tr>
-                            </table>
-                            <table class="table">
-                                <p>Child measurements</p>
-                                <thead>
-                                    <tr>
-                                        <td>Weight</td>
-                                        <td>Height</td>
-                                        <td>Sole Length</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{suggestion.child_weight}}</td>
-                                        <td>{{suggestion.child_height}}</td>
-                                        <td>{{suggestion.child_foot_size}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <table class="table">
-                                <p>Item measurements</p>
-                                <thead>
-                                    <tr>
-                                        <td>Weight(lbs)</td>
-                                        <td>Height(in)</td>
-                                        <!-- <td>Sole Length(in)</td> -->
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>{{suggestion.min_weight}} - {{suggestion.max_weight}}</td>
-                                        <td>{{suggestion.min_height}} - {{suggestion.max_height}}</td>
-                                        <!-- <td>{{suggestion.child_height}}</td>
-                                        <td>{{suggestion.child_foot_size}}</td> -->
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+
+                                <!-- result card -->
+                                <div class="result_card p-3 border border-radius-3 border-dark border-3 rounded rounded-3 col-3 all {{ suggestion.size }} {{ suggestion.brand }} {{ suggestion.clothing_type }} ">
+                                    <div class="d-flex justify-content-center">
+                                        <p> {{suggestion.size}} - {{suggestion.brand}} </p>
+                                    </div>
+                                    <div class="card-head border border-3 border-dark rounded rounded-3 mb-3">
+                                        <div class="d-flex justify-content-around text-center">
+                                            <div class="sizing border border-3 border-dark col-6">
+                                                <p>Sizing</p>
+                                                <p>{{suggestion.size}}</p>
+                                            </div>
+                                            <div class="brand  border border-3 border-dark col-6">
+                                                <p>Brand</p>
+                                                <p>{{suggestion.brand}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-around text-center">
+                                            <div class="clothing_type  border border-3 border-dark col-6">
+                                                <p>Clothing Type</p>
+                                                <p>{{suggestion.clothing_type}}</p>
+                                            </div>
+                                            <div class="match_type  border border-3 border-dark col-6">
+                                                <p>Current Match Type</p>
+                                                {% if suggestion.min_height <= child.height <= suggestion.max_height and suggestion.min_weight <= child.weight <= suggestion.max_weight%}
+                                                    <p>100%</p>
+                                                {% elif suggestion.min_height <= child.height <= suggestion.max_height %}
+                                                    <p>50%</p>
+                                                    <p>Height</p>
+                                                {% elif suggestion.min_weight <= child.weight <= suggestion.max_weight %}
+                                                    <p>50%</p>
+                                                    <p>weight</p>
+                                                {% else %}
+                                                    <p>0%</p>
+                                                {% endif %}
+                                                <p></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table text-center">
+                                        <p class="text-center">Item measurements</p>
+                                        <thead>
+                                            <tr>
+                                                <td>Weight(lbs)</td>
+                                                <td>Height(in)</td>
+                                                <!-- <td>Sole Length(in)</td> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{suggestion.min_weight}} - {{suggestion.max_weight}}</td>
+                                                <td>{{suggestion.min_height}} - {{suggestion.max_height}}</td>
+                                                <!-- <td>{{suggestion.child_height}}</td>
+                                                <td>{{suggestion.child_foot_size}}</td> -->
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                         {% endfor %}
                     </div>
                 </div>

@@ -7,3 +7,11 @@
 .icon{
     height: 30px;
 }
+
+.result_card{
+    display:block;
+}
+
+.hide{
+    display:none;
+}

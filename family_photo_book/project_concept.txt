@@ -1,0 +1,2 @@
+users can upload pictures of their family member and tag the pictures ith the names of their family member. 
+pictures can then be used in a slideshow to teach kids about their family members. 

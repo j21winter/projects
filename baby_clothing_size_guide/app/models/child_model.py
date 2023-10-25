@@ -6,6 +6,7 @@ class Child:
     def __init__(self, data):
         self.id = data['id']
         self.name = data['name']
+        self.date_of_birth = data['date_of_birth']
         self.height = data['height']
         self.weight = data['weight']
         self.foot_size = data['foot_size']
@@ -16,9 +17,9 @@ class Child:
     def create_child(cls, data):
         query = '''
                 INSERT INTO children
-                (name, height, weight, foot_size, user_id)
+                (name, date_of_birth, height, weight, foot_size, user_id)
                 VALUES
-                (%(child_name)s, %(child_height)s, %(child_weight)s, %(child_sole_length)s, %(user_id)s);
+                (%(child_name)s, %(date_of_birth)s, %(child_height)s, %(child_weight)s, %(child_sole_length)s, %(user_id)s);
                 '''
         return connectToMySQL(cls.db).query_db(query, data)
     
@@ -26,7 +27,7 @@ class Child:
     def update_child(cls, data):
         query = '''
         UPDATE children 
-        SET name = %(name)s, height = %(height)s, weight = %(weight)s, foot_size = %(sole_length)s
+        SET name = %(name)s, date_of_birth = %(date_of_birth)s, height = %(height)s, weight = %(weight)s, foot_size = %(sole_length)s
         WHERE children.id = %(id)s;
         '''
         return connectToMySQL(cls.db).query_db(query, data)
@@ -58,5 +59,14 @@ class Child:
             'child_id': row['child_id'],
             }))
         return child
+    
+    @classmethod
+    def delete_child(cls, id):
+        query = '''
+                DELETE
+                FROM children
+                WHERE id = %(id)s'''
+        return (connectToMySQL(cls.db).query_db(query, {'id': id}))
+
 
 
